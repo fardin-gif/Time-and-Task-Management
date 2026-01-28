@@ -9,10 +9,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
@@ -48,7 +46,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -76,9 +74,11 @@
             color: var(--text-secondary);
             font-size: 1.1rem;
             font-weight: 400;
+            margin-bottom: 20px;
         }
 
         .nav-btn {
+            position: absolute;
             top: 25px;
             right: 25px;
             padding: 12px 20px;
@@ -114,6 +114,146 @@
             transform: translateY(-5px);
         }
 
+        /* Timer Section */
+        .timer-section {
+            margin-bottom: 30px;
+        }
+
+        .timer-display {
+            text-align: center;
+            padding: 20px;
+            background: rgba(15, 204, 206, 0.1);
+            border-radius: 12px;
+            border: 2px solid rgba(15, 204, 206, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .timer-time {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+        }
+
+        .timer-task {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .timer-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-btn.start {
+            background: var(--success);
+            color: white;
+        }
+
+        .timer-btn.stop {
+            background: var(--danger);
+            color: white;
+        }
+
+        .timer-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .timer-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Presets Section */
+        .presets-section {
+            margin-bottom: 25px;
+        }
+
+        .presets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .preset-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(15, 204, 206, 0.3);
+        }
+
+        .preset-drag-handle {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            cursor: grab;
+        }
+
+        .preset-drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* Form Styles */
         .form-group {
             margin-bottom: 25px;
         }
@@ -222,7 +362,7 @@
             font-size: 0.9rem;
         }
 
-        .next-day-notice {
+        .date-preview {
             text-align: center;
             padding: 10px;
             background: rgba(255, 152, 0, 0.1);
@@ -379,8 +519,8 @@
             display: block;
         }
 
-        /* Confirmation Popup Styles */
-        .popup-overlay {
+        /* Modal Styles */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -396,65 +536,153 @@
             transition: var(--transition);
         }
 
-        .popup-overlay.active {
+        .modal-overlay.active {
             opacity: 1;
             visibility: visible;
         }
 
-        .popup {
+        .modal {
             background: var(--secondary);
             border-radius: var(--border-radius);
             padding: 30px;
-            max-width: 450px;
+            max-width: 500px;
             width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
             box-shadow: var(--shadow);
             transform: scale(0.9);
             transition: var(--transition);
-            text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .popup-overlay.active .popup {
+        .modal-overlay.active .modal {
             transform: scale(1);
         }
 
-        .popup-icon {
-            font-size: 60px;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
             color: var(--accent);
-        }
-
-        .popup-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--text);
             font-weight: 600;
         }
 
-        .popup-message {
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .popup-btn {
-            padding: 14px 30px;
-            background: var(--accent);
-            color: var(--primary);
+        .modal-close {
+            background: none;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
             cursor: pointer;
             transition: var(--transition);
         }
 
-        .popup-btn:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
+        .modal-close:hover {
+            color: var(--text);
         }
 
-        @media (max-width: 700px) {
+        .preset-editor-list {
+            margin: 20px 0;
+        }
+
+        .preset-editor-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: move;
+        }
+
+        .preset-editor-item.sortable-ghost {
+            opacity: 0.4;
+        }
+
+        .preset-editor-item.sortable-chosen {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .preset-editor-item input {
+            flex: 1;
+            padding: 8px 12px;
+        }
+
+        .preset-editor-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Overlap Detection Styles */
+        .overlap-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .overlap-option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .overlap-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .overlap-option.selected {
+            background: rgba(15, 204, 206, 0.2);
+            border-color: var(--accent);
+        }
+
+        /* Keyboard Shortcut Hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            z-index: 100;
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
             .efficiency-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
@@ -481,11 +709,27 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .timer-time {
+                font-size: 2.5rem;
+            }
+            
+            .presets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 480px) {
             .efficiency-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .timer-buttons {
+                flex-direction: column;
+            }
+            
+            .presets-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -494,11 +738,47 @@
     <div class="container">
         <header>
             <h1>Time & Task Tracker</h1>
-            <a href="list.html" class="nav-btn" id="viewActivitiesBtn">
+            <p class="subtitle">Press <kbd>?</kbd> for keyboard shortcuts</p>
+            <a href="list(1).html" class="nav-btn" id="viewActivitiesBtn">
                 <i class="fas fa-history"></i> View Activities
             </a>
         </header>
 
+        <!-- Timer Section -->
+        <div class="card timer-section" id="timerSection" style="display: none;">
+            <div class="timer-display">
+                <div class="timer-time" id="timerDisplay">00:00:00</div>
+                <div class="timer-task" id="timerTask">No active task</div>
+                <div class="timer-buttons">
+                    <button class="timer-btn start" id="timerStartBtn" disabled>
+                        <i class="fas fa-play"></i> Start Timer
+                    </button>
+                    <button class="timer-btn stop" id="timerStopBtn" disabled>
+                        <i class="fas fa-stop"></i> Stop & Save
+                    </button>
+                </div>
+            </div>
+            <div id="runningTimerBadge" style="display: none;">
+                <span class="timer-badge">
+                    <i class="fas fa-clock"></i> Timer Running
+                </span>
+            </div>
+        </div>
+
+        <!-- Presets Section -->
+        <div class="card presets-section">
+            <div class="presets-header">
+                <label>Quick Presets</label>
+                <button class="btn" id="editPresetsBtn" style="width: auto; padding: 10px 20px;">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="presets-grid" id="presetsGrid">
+                <!-- Presets will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Main Form Card -->
         <div class="card">
             <div class="date-selector">
                 <div class="date-btn active" data-date="today">Today</div>
@@ -526,8 +806,8 @@
                     </div>
                 </div>
                 
-                <div class="next-day-notice" id="nextDayNotice">
-                    <i class="fas fa-moon"></i> This activity spans to the next day
+                <div class="date-preview" id="datePreview">
+                    <i class="fas fa-calendar-alt"></i> <span id="datePreviewText"></span>
                 </div>
                 
                 <div class="duration-display" id="durationDisplay">
@@ -544,11 +824,10 @@
                     <div class="task-option" data-type="input">Input</div>
                 </div>
                 
-                <div class="task-input-container" id="chooseTaskContainer">
+                <div class="task-input-container active" id="chooseTaskContainer">
                     <div class="select-wrapper">
                         <select id="taskSelect">
                             <option value="">Select a task</option>
-                            <!-- Options will be populated dynamically -->
                         </select>
                     </div>
                 </div>
@@ -603,34 +882,114 @@
         </div>
     </div>
 
-    <!-- Confirmation Popup -->
-    <div class="popup-overlay" id="confirmationPopup">
-        <div class="popup">
-            <div class="popup-icon">
-                <i class="fas fa-check-circle"></i>
+    <!-- Presets Editor Modal -->
+    <div class="modal-overlay" id="presetsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Quick Presets</h2>
+                <button class="modal-close" id="closePresetsModal">&times;</button>
             </div>
-            <h2 class="popup-title">Success!</h2>
-            <p class="popup-message">Your activity has been saved successfully to the database.</p>
-            <button class="popup-btn" id="closePopup">Continue</button>
+            <div class="preset-editor-list" id="presetEditorList">
+                <!-- Presets editor items will be added here -->
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" id="addPresetBtn" style="flex: 1;">
+                    <i class="fas fa-plus"></i> Add New Preset
+                </button>
+                <button class="btn" id="savePresetsBtn" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Overlap Detection Modal -->
+    <div class="modal-overlay" id="overlapModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Time Overlap Detected</h2>
+                <button class="modal-close" id="closeOverlapModal">&times;</button>
+            </div>
+            <p>This activity overlaps with existing activities. How would you like to proceed?</p>
+            <div class="overlap-options" id="overlapOptions">
+                <!-- Options will be added dynamically -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn" id="cancelOverlapBtn">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div class="modal-overlay" id="confirmationPopup">
+        <div class="modal">
+            <div style="text-align: center;">
+                <div style="font-size: 60px; margin-bottom: 20px; color: var(--accent);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="modal-title">Success!</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 25px; line-height: 1.6;">Your activity has been saved successfully to the database.</p>
+                <button class="btn" id="closePopup">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Hint -->
+    <div class="keyboard-hint" id="keyboardHint" style="display: none;">
+        <div><kbd>Enter</kbd> Save</div>
+        <div><kbd>Esc</kbd> Clear</div>
+        <div><kbd>←</kbd>/<kbd>→</kbd> Adjust Efficiency</div>
+        <div><kbd>Ctrl+K</kbd> Task Search</div>
+    </div>
+
     <script>
-        // Firebase configuration
+        // ============================
+        // Firebase Configuration
+        // ============================
         const firebaseConfig = {
-            apiKey: "AIzaSyABxUYOcANeZql5JvK-O2eXs_2NKWd3soo",
-            authDomain: "time-tracker-22dcb.firebaseapp.com",
-            projectId: "time-tracker-22dcb",
-            storageBucket: "time-tracker-22dcb.firebasestorage.app",
-            messagingSenderId: "194403858815",
-            appId: "1:194403858815:web:d337057ec1768f6b9b024a"
+            apiKey: "AIzaSyB94_Y4ox7f0OvPlTZ2kQ-RQQoAbhlp0CU",
+            authDomain: "time-and-task-management-2d8c3.firebaseapp.com",
+            projectId: "time-and-task-management-2d8c3",
+            storageBucket: "time-and-task-management-2d8c3.firebasestorage.app",
+            messagingSenderId: "987578072001",
+            appId: "1:987578072001:web:f10a27db2b915690364d40"
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        let app;
+        let db;
+        let auth;
+        
+        try {
+            if (!firebase.apps.length) {
+                app = firebase.initializeApp(firebaseConfig);
+            } else {
+                app = firebase.app();
+            }
+            db = firebase.firestore();
+            console.log("Firebase initialized successfully");
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            alert("Firebase initialization failed. Check console for details.");
+        }
 
-        // DOM elements
+        // ============================
+        // Device ID for Anonymous Users
+        // ============================
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        // ============================
+        // DOM Elements
+        // ============================
         const dateButtons = document.querySelectorAll('.date-btn');
         const customDatePicker = document.getElementById('customDatePicker');
         const customDateInput = document.getElementById('customDate');
@@ -648,23 +1007,1068 @@
         const confirmationPopup = document.getElementById('confirmationPopup');
         const closePopupBtn = document.getElementById('closePopup');
         const durationValue = document.getElementById('durationValue');
-        const nextDayNotice = document.getElementById('nextDayNotice');
-
-        // Set default time values
-        const now = new Date();
-        const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+        const datePreview = document.getElementById('datePreview');
+        const datePreviewText = document.getElementById('datePreviewText');
         
-        timeFromInput.value = formatTime(oneHourAgo);
-        timeToInput.value = formatTime(now);
+        // Timer elements
+        const timerSection = document.getElementById('timerSection');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerTask = document.getElementById('timerTask');
+        const timerStartBtn = document.getElementById('timerStartBtn');
+        const timerStopBtn = document.getElementById('timerStopBtn');
+        const runningTimerBadge = document.getElementById('runningTimerBadge');
         
-        // Set default custom date to today
-        customDateInput.valueAsDate = new Date();
+        // Presets elements
+        const presetsGrid = document.getElementById('presetsGrid');
+        const editPresetsBtn = document.getElementById('editPresetsBtn');
+        const presetsModal = document.getElementById('presetsModal');
+        const closePresetsModal = document.getElementById('closePresetsModal');
+        const presetEditorList = document.getElementById('presetEditorList');
+        const addPresetBtn = document.getElementById('addPresetBtn');
+        const savePresetsBtn = document.getElementById('savePresetsBtn');
+        
+        // Overlap modal elements
+        const overlapModal = document.getElementById('overlapModal');
+        const closeOverlapModal = document.getElementById('closeOverlapModal');
+        const overlapOptions = document.getElementById('overlapOptions');
+        const cancelOverlapBtn = document.getElementById('cancelOverlapBtn');
+        
+        // Keyboard hint
+        const keyboardHint = document.getElementById('keyboardHint');
 
-        // Initialize task list from localStorage
-        let savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
-        populateTaskSelect();
+        // ============================
+        // State Variables
+        // ============================
+        let userPresets = [];
+        let isTimerRunning = false;
+        let timerInterval = null;
+        let timerStartTime = null;
+        let currentTimerTask = null;
+        let lastUsedTask = localStorage.getItem('lastUsedTask') || '';
+        let lastUsedEfficiency = parseInt(localStorage.getItem('lastUsedEfficiency') || '0');
+        
+        // Activity being edited (null for new)
+        let editingActivityId = null;
+        let pendingActivityData = null;
 
-        // Event listeners
+        // ============================
+        // Initialization
+        // ============================
+        function init() {
+            // Set default time values
+            const now = new Date();
+            const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+            
+            timeFromInput.value = formatTime(oneHourAgo);
+            timeToInput.value = formatTime(now);
+            
+            // Set default custom date to today
+            customDateInput.valueAsDate = new Date();
+            
+            // Initialize task list from localStorage
+            populateTaskSelect();
+            
+            // Load presets
+            loadPresets();
+            
+            // Check for running timer
+            checkRunningTimer();
+            
+            // Set last used efficiency
+            if (!isNaN(lastUsedEfficiency) && lastUsedEfficiency >= -3 && lastUsedEfficiency <= 3) {
+                const efficiencyBtn = document.querySelector(`.efficiency-btn[data-value="${lastUsedEfficiency}"]`);
+                if (efficiencyBtn) {
+                    efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
+                    efficiencyBtn.classList.add('selected');
+                }
+            }
+            
+            // Initialize keyboard shortcuts
+            initKeyboardShortcuts();
+            
+            // Calculate initial duration
+            calculateDuration();
+        }
+
+        // ============================
+        // Core Utility Functions
+        // ============================
+        function formatTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function formatDuration(minutes) {
+            if (!minutes) return '0h 0m';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        function formatDateForDisplay(date) {
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // ============================
+        // Date & Time Functions
+        // ============================
+        function getSelectedDate() {
+            const activeButton = document.querySelector('.date-btn.active');
+            const dateType = activeButton.dataset.date;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (dateType === 'today') {
+                return today;
+            } else if (dateType === 'yesterday') {
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                return yesterday;
+            } else if (dateType === 'custom') {
+                return new Date(customDateInput.value);
+            }
+        }
+
+        function getDateTimeRange() {
+            const selectedDate = getSelectedDate();
+            const timeFrom = timeFromInput.value;
+            const timeTo = timeToInput.value;
+            
+            if (!timeFrom || !timeTo) return null;
+            
+            const startDateTime = new Date(selectedDate);
+            const endDateTime = new Date(selectedDate);
+            
+            // Set the time for startDateTime
+            const [fromHours, fromMinutes] = timeFrom.split(':').map(Number);
+            startDateTime.setHours(fromHours, fromMinutes, 0, 0);
+            
+            // Set the time for endDateTime
+            const [toHours, toMinutes] = timeTo.split(':').map(Number);
+            endDateTime.setHours(toHours, toMinutes, 0, 0);
+            
+            // If end time is earlier than start time, assume it's the next day
+            if (endDateTime < startDateTime) {
+                endDateTime.setDate(endDateTime.getDate() + 1);
+            }
+            
+            return {
+                start: startDateTime,
+                end: endDateTime,
+                startTimestamp: firebase.firestore.Timestamp.fromDate(startDateTime),
+                endTimestamp: firebase.firestore.Timestamp.fromDate(endDateTime)
+            };
+        }
+
+        function calculateDuration() {
+            const range = getDateTimeRange();
+            
+            if (!range) {
+                durationValue.textContent = "0h 0m";
+                datePreview.style.display = 'none';
+                return { hours: 0, minutes: 0, totalMinutes: 0 };
+            }
+            
+            // Update date preview
+            const isSameDay = range.start.toDateString() === range.end.toDateString();
+            if (isSameDay) {
+                datePreview.style.display = 'none';
+            } else {
+                datePreviewText.textContent = 
+                    `${formatDateForDisplay(range.start)} → ${formatDateForDisplay(range.end)}`;
+                datePreview.style.display = 'block';
+            }
+            
+            // Calculate duration
+            const durationMs = range.end - range.start;
+            const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+            const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            // Update display
+            durationValue.textContent = `${durationHours}h ${durationMinutes}m`;
+            
+            return {
+                hours: durationHours,
+                minutes: durationMinutes,
+                totalMinutes: durationHours * 60 + durationMinutes
+            };
+        }
+
+        // ============================
+        // Task Management
+        // ============================
+        function populateTaskSelect() {
+            const savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+            
+            // Clear existing options except the first one
+            while (taskSelect.options.length > 1) {
+                taskSelect.remove(1);
+            }
+            
+            // Add saved tasks to the dropdown
+            savedTasks.forEach(task => {
+                const option = document.createElement('option');
+                option.value = task;
+                option.textContent = task;
+                taskSelect.appendChild(option);
+            });
+            
+            // Select last used task if it exists
+            if (lastUsedTask && savedTasks.includes(lastUsedTask)) {
+                taskSelect.value = lastUsedTask;
+            }
+        }
+
+        function addTaskToSavedTasks(task) {
+            if (!task) return;
+            
+            const savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+            
+            // Check if task already exists
+            if (!savedTasks.includes(task)) {
+                savedTasks.push(task);
+                localStorage.setItem('savedTasks', JSON.stringify(savedTasks));
+                populateTaskSelect();
+            }
+            
+            // Save as last used
+            localStorage.setItem('lastUsedTask', task);
+            lastUsedTask = task;
+        }
+
+        function getSelectedTask() {
+            const activeOption = document.querySelector('.task-option.active');
+            
+            if (activeOption.dataset.type === 'choose') {
+                return taskSelect.value;
+            } else {
+                return customTaskInput.value;
+            }
+        }
+
+        function getSelectedEfficiency() {
+            const selectedButton = document.querySelector('.efficiency-btn.selected');
+            return selectedButton ? parseInt(selectedButton.dataset.value) : 0;
+        }
+
+        // ============================
+        // Overlap Detection
+        // ============================
+        async function checkForOverlaps(range) {
+            if (!range || !db) return [];
+            
+            try {
+                // Query activities that overlap with the given range
+                const overlapsQuery = db.collection('activities')
+                    .where('startAt', '<=', range.endTimestamp)
+                    .where('endAt', '>=', range.startTimestamp);
+                
+                // Exclude the activity we're editing
+                if (editingActivityId) {
+                    // We'll filter client-side for now since Firestore doesn't support != in queries
+                    const snapshot = await overlapsQuery.get();
+                    return snapshot.docs
+                        .filter(doc => doc.id !== editingActivityId)
+                        .map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        }));
+                } else {
+                    const snapshot = await overlapsQuery.get();
+                    return snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                }
+            } catch (error) {
+                console.error('Error checking for overlaps:', error);
+                return [];
+            }
+        }
+
+        function showOverlapModal(overlappingActivities, activityData) {
+            pendingActivityData = activityData;
+            
+            // Clear previous options
+            overlapOptions.innerHTML = '';
+            
+            // Add options
+            const options = [
+                {
+                    id: 'adjust',
+                    title: 'Auto-adjust to nearest non-overlapping slot',
+                    description: 'Will shift your activity to avoid overlaps'
+                },
+                {
+                    id: 'proceed',
+                    title: 'Proceed anyway (mark as overlap)',
+                    description: 'Save with overlap flag for manual review'
+                },
+                {
+                    id: 'cancel',
+                    title: 'Cancel and edit time',
+                    description: 'Go back and choose a different time'
+                }
+            ];
+            
+            options.forEach(option => {
+                const div = document.createElement('div');
+                div.className = 'overlap-option';
+                div.dataset.option = option.id;
+                div.innerHTML = `
+                    <strong>${option.title}</strong>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px;">
+                        ${option.description}
+                    </div>
+                `;
+                div.addEventListener('click', () => handleOverlapOption(option.id));
+                overlapOptions.appendChild(div);
+            });
+            
+            overlapModal.classList.add('active');
+        }
+
+        async function handleOverlapOption(optionId) {
+            overlapModal.classList.remove('active');
+            
+            if (optionId === 'cancel') {
+                return; // User cancelled
+            }
+            
+            let activityData = { ...pendingActivityData };
+            
+            if (optionId === 'adjust') {
+                // Auto-adjust logic
+                activityData = await autoAdjustActivity(activityData);
+            } else if (optionId === 'proceed') {
+                // Mark as overlap
+                activityData.overlapFlag = true;
+            }
+            
+            // Save the activity
+            await saveActivityToFirestore(activityData);
+            pendingActivityData = null;
+        }
+
+        async function autoAdjustActivity(activityData) {
+            // Simple auto-adjust: shift to end of last overlapping activity
+            const range = getDateTimeRange();
+            if (!range) return activityData;
+            
+            const overlaps = await checkForOverlaps(range);
+            if (overlaps.length === 0) return activityData;
+            
+            // Find the latest end time among overlaps
+            let latestEnd = range.start;
+            overlaps.forEach(overlap => {
+                if (overlap.endAt && overlap.endAt.toDate() > latestEnd) {
+                    latestEnd = overlap.endAt.toDate();
+                }
+            });
+            
+            // Shift activity to start after latest end
+            const duration = range.end - range.start;
+            const newStart = new Date(latestEnd.getTime() + 5 * 60 * 1000); // 5 minutes buffer
+            const newEnd = new Date(newStart.getTime() + duration);
+            
+            // Update form fields
+            const isSameDay = newStart.toDateString() === newEnd.toDateString();
+            const startDate = new Date(newStart);
+            startDate.setHours(0, 0, 0, 0);
+            
+            // Update date selector if needed
+            if (startDate.toDateString() !== getSelectedDate().toDateString()) {
+                // Set to custom date
+                dateButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelector('.date-btn[data-date="custom"]').classList.add('active');
+                customDatePicker.classList.add('active');
+                customDateInput.valueAsDate = startDate;
+            }
+            
+            // Update time inputs
+            timeFromInput.value = formatTime(newStart);
+            timeToInput.value = formatTime(newEnd);
+            
+            // Recalculate and return updated data
+            const newRange = getDateTimeRange();
+            return {
+                ...activityData,
+                startAt: newRange.startTimestamp,
+                endAt: newRange.endTimestamp
+            };
+        }
+
+        // ============================
+        // Timer Functions
+        // ============================
+        async function checkRunningTimer() {
+            try {
+                // Check for running timer in Firestore
+                const deviceId = getDeviceId();
+                const snapshot = await db.collection('devices')
+                    .doc(deviceId)
+                    .collection('runningTimers')
+                    .limit(1)
+                    .get();
+                
+                if (!snapshot.empty) {
+                    const timerDoc = snapshot.docs[0];
+                    const timerData = timerDoc.data();
+                    
+                    // Check if timer is still valid (started within last 24 hours)
+                    const startTime = timerData.startAt.toDate();
+                    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    
+                    if (startTime > twentyFourHoursAgo) {
+                        startTimerUI(timerData.task, startTime);
+                        return;
+                    }
+                }
+                
+                // No valid running timer found
+                stopTimerUI();
+            } catch (error) {
+                console.error('Error checking running timer:', error);
+                stopTimerUI();
+            }
+        }
+
+        function startTimerUI(taskName, startTime) {
+            isTimerRunning = true;
+            timerStartTime = startTime;
+            currentTimerTask = taskName;
+            
+            // Update UI
+            timerSection.style.display = 'block';
+            timerTask.textContent = taskName || 'No task selected';
+            timerStartBtn.disabled = true;
+            timerStopBtn.disabled = false;
+            runningTimerBadge.style.display = 'block';
+            
+            // Start timer update
+            updateTimerDisplay();
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+            
+            // Auto-select the task in the form
+            if (taskName) {
+                const savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+                if (savedTasks.includes(taskName)) {
+                    taskSelect.value = taskName;
+                } else {
+                    customTaskInput.value = taskName;
+                    // Switch to input mode
+                    taskOptions.forEach(opt => opt.classList.remove('active'));
+                    document.querySelector('.task-option[data-type="input"]').classList.add('active');
+                    chooseTaskContainer.classList.remove('active');
+                    inputTaskContainer.classList.add('active');
+                }
+            }
+        }
+
+        function stopTimerUI() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerStartTime = null;
+            currentTimerTask = null;
+            
+            // Update UI
+            timerSection.style.display = 'none';
+            timerStartBtn.disabled = false;
+            timerStopBtn.disabled = true;
+            runningTimerBadge.style.display = 'none';
+        }
+
+        function updateTimerDisplay() {
+            if (!timerStartTime) return;
+            
+            const now = new Date();
+            const elapsedMs = now - timerStartTime;
+            
+            const hours = Math.floor(elapsedMs / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsedMs % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsedMs % (1000 * 60)) / 1000);
+            
+            timerDisplay.textContent = 
+                `${hours.toString().padStart(2, '0')}:` +
+                `${minutes.toString().padStart(2, '0')}:` +
+                `${seconds.toString().padStart(2, '0')}`;
+        }
+
+        async function startTimer() {
+            const task = getSelectedTask();
+            if (!task) {
+                alert('Please select a task before starting timer');
+                return;
+            }
+            
+            try {
+                const deviceId = getDeviceId();
+                const startTime = new Date();
+                const timerData = {
+                    task: task,
+                    startAt: firebase.firestore.Timestamp.fromDate(startTime),
+                    deviceId: deviceId,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                // Save to Firestore
+                await db.collection('devices')
+                    .doc(deviceId)
+                    .collection('runningTimers')
+                    .doc('current')
+                    .set(timerData);
+                
+                startTimerUI(task, startTime);
+                
+                // Update form end time to now
+                timeToInput.value = formatTime(startTime);
+                
+            } catch (error) {
+                console.error('Error starting timer:', error);
+                alert('Failed to start timer');
+            }
+        }
+
+        async function stopTimer() {
+            if (!isTimerRunning || !timerStartTime) return;
+            
+            try {
+                const deviceId = getDeviceId();
+                const endTime = new Date();
+                
+                // Delete running timer from Firestore
+                await db.collection('devices')
+                    .doc(deviceId)
+                    .collection('runningTimers')
+                    .doc('current')
+                    .delete();
+                
+                // Create activity from timer
+                const startDate = new Date(timerStartTime);
+                startDate.setHours(0, 0, 0, 0);
+                
+                // Update form with timer data
+                const selectedDateBtn = document.querySelector('.date-btn.active');
+                if (selectedDateBtn.dataset.date !== 'custom') {
+                    // Check if timer started today or yesterday
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (startDate.getTime() === today.getTime()) {
+                        // Started today
+                        dateButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.date-btn[data-date="today"]').classList.add('active');
+                        customDatePicker.classList.remove('active');
+                    } else if (startDate.getTime() === today.getTime() - 24 * 60 * 60 * 1000) {
+                        // Started yesterday
+                        dateButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.date-btn[data-date="yesterday"]').classList.add('active');
+                        customDatePicker.classList.remove('active');
+                    } else {
+                        // Custom date
+                        dateButtons.forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.date-btn[data-date="custom"]').classList.add('active');
+                        customDatePicker.classList.add('active');
+                        customDateInput.valueAsDate = startDate;
+                    }
+                }
+                
+                // Update time inputs
+                timeFromInput.value = formatTime(timerStartTime);
+                timeToInput.value = formatTime(endTime);
+                
+                // Recalculate duration
+                calculateDuration();
+                
+                // Stop timer UI
+                stopTimerUI();
+                
+                // Show success message
+                alert('Timer stopped. Activity data loaded into form. Click Save to save it.');
+                
+            } catch (error) {
+                console.error('Error stopping timer:', error);
+                alert('Failed to stop timer');
+            }
+        }
+
+        // ============================
+        // Presets Management
+        // ============================
+        async function loadPresets() {
+            try {
+                const deviceId = getDeviceId();
+                const doc = await db.collection('devices')
+                    .doc(deviceId)
+                    .collection('presets')
+                    .doc('userPresets')
+                    .get();
+                
+                if (doc.exists) {
+                    userPresets = doc.data().presets || [];
+                } else {
+                    // Default presets
+                    userPresets = [
+                        'Work',
+                        'Study',
+                        'Exercise',
+                        'Reading',
+                        'Meeting',
+                        'Break',
+                        'Housework'
+                    ];
+                    await savePresetsToFirestore();
+                }
+                
+                renderPresets();
+                
+            } catch (error) {
+                console.error('Error loading presets:', error);
+                // Fallback to localStorage
+                const localPresets = JSON.parse(localStorage.getItem('userPresets'));
+                if (localPresets) {
+                    userPresets = localPresets;
+                } else {
+                    userPresets = [
+                        'Work',
+                        'Study',
+                        'Exercise',
+                        'Reading',
+                        'Meeting',
+                        'Break',
+                        'Housework'
+                    ];
+                }
+                renderPresets();
+            }
+        }
+
+        function renderPresets() {
+            presetsGrid.innerHTML = '';
+            
+            userPresets.forEach((preset, index) => {
+                const button = document.createElement('button');
+                button.className = 'preset-btn';
+                button.textContent = preset;
+                button.dataset.index = index;
+                
+                button.addEventListener('click', () => {
+                    // Set task in form
+                    const savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+                    if (savedTasks.includes(preset)) {
+                        taskSelect.value = preset;
+                    } else {
+                        customTaskInput.value = preset;
+                        // Switch to input mode
+                        taskOptions.forEach(opt => opt.classList.remove('active'));
+                        document.querySelector('.task-option[data-type="input"]').classList.add('active');
+                        chooseTaskContainer.classList.remove('active');
+                        inputTaskContainer.classList.add('active');
+                    }
+                    
+                    // Save as last used
+                    localStorage.setItem('lastUsedTask', preset);
+                    lastUsedTask = preset;
+                    
+                    // Focus on efficiency selection
+                    document.querySelector('.efficiency-btn.selected')?.focus();
+                });
+                
+                presetsGrid.appendChild(button);
+            });
+        }
+
+        function renderPresetEditor() {
+            presetEditorList.innerHTML = '';
+            
+            userPresets.forEach((preset, index) => {
+                const item = document.createElement('div');
+                item.className = 'preset-editor-item';
+                item.draggable = true;
+                item.dataset.index = index;
+                
+                item.innerHTML = `
+                    <div class="preset-drag-handle">
+                        <i class="fas fa-grip-vertical"></i>
+                    </div>
+                    <input type="text" value="${preset}" class="preset-input" data-index="${index}">
+                    <div class="preset-editor-actions">
+                        <button class="icon-btn delete-preset" data-index="${index}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                presetEditorList.appendChild(item);
+            });
+            
+            // Add drag and drop functionality
+            initDragAndDrop();
+            
+            // Add event listeners for delete buttons
+            document.querySelectorAll('.delete-preset').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('.delete-preset').dataset.index);
+                    deletePreset(index);
+                });
+            });
+            
+            // Add input event listeners
+            document.querySelectorAll('.preset-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    updatePreset(index, e.target.value);
+                });
+            });
+        }
+
+        function initDragAndDrop() {
+            let draggedItem = null;
+            
+            document.querySelectorAll('.preset-editor-item').forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedItem = item;
+                    setTimeout(() => {
+                        item.classList.add('sortable-ghost');
+                    }, 0);
+                });
+                
+                item.addEventListener('dragend', (e) => {
+                    setTimeout(() => {
+                        item.classList.remove('sortable-ghost');
+                        draggedItem = null;
+                    }, 0);
+                });
+            });
+            
+            presetEditorList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(presetEditorList, e.clientY);
+                const draggable = draggedItem;
+                
+                if (afterElement == null) {
+                    presetEditorList.appendChild(draggable);
+                } else {
+                    presetEditorList.insertBefore(draggable, afterElement);
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.preset-editor-item:not(.sortable-ghost)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function updatePreset(index, value) {
+            if (index >= 0 && index < userPresets.length) {
+                userPresets[index] = value.trim();
+            }
+        }
+
+        function deletePreset(index) {
+            if (index >= 0 && index < userPresets.length) {
+                userPresets.splice(index, 1);
+                renderPresetEditor();
+            }
+        }
+
+        function addNewPreset() {
+            userPresets.push('New Preset');
+            renderPresetEditor();
+            
+            // Scroll to bottom and focus new input
+            const items = presetEditorList.querySelectorAll('.preset-editor-item');
+            const lastItem = items[items.length - 1];
+            const input = lastItem.querySelector('.preset-input');
+            input.focus();
+            input.select();
+        }
+
+        async function savePresetsToFirestore() {
+            try {
+                const deviceId = getDeviceId();
+                await db.collection('devices')
+                    .doc(deviceId)
+                    .collection('presets')
+                    .doc('userPresets')
+                    .set({
+                        presets: userPresets,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                // Also save to localStorage as fallback
+                localStorage.setItem('userPresets', JSON.stringify(userPresets));
+                
+                renderPresets();
+                return true;
+            } catch (error) {
+                console.error('Error saving presets:', error);
+                // Fallback to localStorage
+                localStorage.setItem('userPresets', JSON.stringify(userPresets));
+                renderPresets();
+                return false;
+            }
+        }
+
+        // ============================
+        // Keyboard Shortcuts
+        // ============================
+        function initKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Don't trigger shortcuts when user is typing in inputs
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                    if (e.key === 'Enter' && !e.shiftKey && e.target.type !== 'textarea') {
+                        // Allow Enter to submit form from input fields
+                        e.preventDefault();
+                        saveActivity();
+                    }
+                    return;
+                }
+                
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        saveActivity();
+                        break;
+                        
+                    case 'Escape':
+                        e.preventDefault();
+                        clearForm();
+                        break;
+                        
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        adjustEfficiency(-1);
+                        break;
+                        
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        adjustEfficiency(1);
+                        break;
+                        
+                    case '?':
+                        e.preventDefault();
+                        keyboardHint.style.display = keyboardHint.style.display === 'none' ? 'block' : 'none';
+                        break;
+                        
+                    case 'k':
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                            // Focus task search
+                            if (chooseTaskContainer.classList.contains('active')) {
+                                taskSelect.focus();
+                            } else {
+                                customTaskInput.focus();
+                            }
+                        }
+                        break;
+                }
+            });
+        }
+
+        function adjustEfficiency(delta) {
+            const currentEfficiency = getSelectedEfficiency();
+            let newEfficiency = currentEfficiency + delta;
+            
+            // Clamp between -3 and 3
+            newEfficiency = Math.max(-3, Math.min(3, newEfficiency));
+            
+            if (newEfficiency !== currentEfficiency) {
+                efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
+                const newButton = document.querySelector(`.efficiency-btn[data-value="${newEfficiency}"]`);
+                if (newButton) {
+                    newButton.classList.add('selected');
+                    localStorage.setItem('lastUsedEfficiency', newEfficiency.toString());
+                    lastUsedEfficiency = newEfficiency;
+                }
+            }
+        }
+
+        function clearForm() {
+            // Reset form to defaults
+            const now = new Date();
+            const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+            
+            timeFromInput.value = formatTime(oneHourAgo);
+            timeToInput.value = formatTime(now);
+            
+            customTaskInput.value = '';
+            progressInput.value = '';
+            
+            // Reset to today
+            dateButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.date-btn[data-date="today"]').classList.add('active');
+            customDatePicker.classList.remove('active');
+            
+            // Reset to choose mode
+            taskOptions.forEach(opt => opt.classList.remove('active'));
+            document.querySelector('.task-option[data-type="choose"]').classList.add('active');
+            chooseTaskContainer.classList.add('active');
+            inputTaskContainer.classList.remove('active');
+            
+            // Reset efficiency to last used or default
+            efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
+            const defaultEfficiencyBtn = document.querySelector(`.efficiency-btn[data-value="${lastUsedEfficiency}"]`);
+            if (defaultEfficiencyBtn) {
+                defaultEfficiencyBtn.classList.add('selected');
+            }
+            
+            editingActivityId = null;
+            calculateDuration();
+        }
+
+        // ============================
+        // Activity Save Functions
+        // ============================
+        async function saveActivity() {
+            // Validation
+            const timeFrom = timeFromInput.value;
+            const timeTo = timeToInput.value;
+            const task = getSelectedTask();
+            const efficiency = getSelectedEfficiency();
+            const progress = progressInput.value.trim();
+            const range = getDateTimeRange();
+            
+            if (!timeFrom || !timeTo) {
+                showConfirmation(false, 'Please select a time range');
+                return;
+            }
+            
+            if (!task) {
+                showConfirmation(false, 'Please select or enter a task');
+                return;
+            }
+            
+            if (efficiency === null || efficiency === undefined) {
+                showConfirmation(false, 'Please select an efficiency rating');
+                return;
+            }
+            
+            if (!range) {
+                showConfirmation(false, 'Invalid time range');
+                return;
+            }
+            
+            // Check for overlaps
+            const overlappingActivities = await checkForOverlaps(range);
+            
+            // Create activity object (NEW DATA MODEL)
+            const activity = {
+                // New fields
+                startAt: range.startTimestamp,
+                endAt: range.endTimestamp,
+                taskName: task,
+                efficiency: efficiency,
+                notes: progress,
+                overlapFlag: overlappingActivities.length > 0,
+                
+                // Keep old fields for backward compatibility
+                date: firebase.firestore.Timestamp.fromDate(range.start),
+                timeFrom: timeFrom,
+                timeTo: timeTo,
+                task: task,
+                progress: progress,
+                duration: calculateDuration().totalMinutes,
+                durationHours: calculateDuration().hours,
+                durationMinutes: calculateDuration().minutes,
+                
+                // Metadata
+                deviceId: getDeviceId(),
+                createdAt: editingActivityId ? firebase.firestore.FieldValue.serverTimestamp() : firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Save last used values
+            localStorage.setItem('lastUsedTask', task);
+            localStorage.setItem('lastUsedEfficiency', efficiency.toString());
+            
+            // If using custom task, add it to saved tasks
+            const activeTaskOption = document.querySelector('.task-option.active');
+            if (activeTaskOption.dataset.type === 'input') {
+                addTaskToSavedTasks(task);
+            }
+            
+            // Handle overlaps
+            if (overlappingActivities.length > 0 && !editingActivityId) {
+                showOverlapModal(overlappingActivities, activity);
+                return;
+            }
+            
+            // Save directly
+            await saveActivityToFirestore(activity);
+        }
+
+        async function saveActivityToFirestore(activity) {
+            // Disable save button
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            try {
+                if (editingActivityId) {
+                    // Update existing activity
+                    await db.collection('activities').doc(editingActivityId).update(activity);
+                } else {
+                    // Create new activity
+                    await db.collection('activities').add(activity);
+                }
+                
+                // Show success confirmation
+                showConfirmation(true, editingActivityId ? 'Activity updated successfully!' : 'Your activity has been saved successfully!');
+                
+                // Reset form
+                clearForm();
+                
+            } catch (error) {
+                console.error('Error saving activity: ', error);
+                showConfirmation(false, 'Error saving activity. Please try again.');
+            } finally {
+                // Re-enable save button
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = editingActivityId ? 
+                    '<i class="fas fa-save"></i> Update Activity' : 
+                    '<i class="fas fa-save"></i> Save Activity';
+            }
+        }
+
+        function showConfirmation(isSuccess, message) {
+            const popupIcon = document.querySelector('#confirmationPopup .fas');
+            const popupTitle = document.querySelector('#confirmationPopup .modal-title');
+            const popupMessage = document.querySelector('#confirmationPopup p');
+            
+            if (isSuccess) {
+                popupIcon.className = 'fas fa-check-circle';
+                popupIcon.style.color = 'var(--accent)';
+                popupTitle.textContent = 'Success!';
+            } else {
+                popupIcon.className = 'fas fa-exclamation-circle';
+                popupIcon.style.color = 'var(--danger)';
+                popupTitle.textContent = 'Error!';
+            }
+            
+            popupMessage.textContent = message;
+            confirmationPopup.classList.add('active');
+        }
+
+        // ============================
+        // Event Listeners
+        // ============================
         dateButtons.forEach(button => {
             button.addEventListener('click', () => {
                 dateButtons.forEach(btn => btn.classList.remove('active'));
@@ -676,7 +2080,6 @@
                     customDatePicker.classList.remove('active');
                 }
                 
-                // Recalculate duration when date changes
                 calculateDuration();
             });
         });
@@ -700,6 +2103,8 @@
             button.addEventListener('click', () => {
                 efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
                 button.classList.add('selected');
+                localStorage.setItem('lastUsedEfficiency', button.dataset.value);
+                lastUsedEfficiency = parseInt(button.dataset.value);
             });
         });
 
@@ -710,227 +2115,54 @@
 
         saveBtn.addEventListener('click', saveActivity);
         
+        // Timer event listeners
+        timerStartBtn.addEventListener('click', startTimer);
+        timerStopBtn.addEventListener('click', stopTimer);
+        
+        // Presets modal event listeners
+        editPresetsBtn.addEventListener('click', () => {
+            renderPresetEditor();
+            presetsModal.classList.add('active');
+        });
+        
+        closePresetsModal.addEventListener('click', () => {
+            presetsModal.classList.remove('active');
+        });
+        
+        addPresetBtn.addEventListener('click', addNewPreset);
+        
+        savePresetsBtn.addEventListener('click', async () => {
+            // Update order from drag and drop
+            const newOrder = [];
+            presetEditorList.querySelectorAll('.preset-editor-item').forEach((item, index) => {
+                const input = item.querySelector('.preset-input');
+                newOrder.push(input.value.trim());
+            });
+            
+            userPresets = newOrder;
+            await savePresetsToFirestore();
+            presetsModal.classList.remove('active');
+        });
+        
+        // Overlap modal event listeners
+        closeOverlapModal.addEventListener('click', () => {
+            overlapModal.classList.remove('active');
+            pendingActivityData = null;
+        });
+        
+        cancelOverlapBtn.addEventListener('click', () => {
+            overlapModal.classList.remove('active');
+            pendingActivityData = null;
+        });
+        
         closePopupBtn.addEventListener('click', () => {
             confirmationPopup.classList.remove('active');
         });
 
-        // Functions
-        function formatTime(date) {
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-
-        function getSelectedDate() {
-            const activeButton = document.querySelector('.date-btn.active');
-            const dateType = activeButton.dataset.date;
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (dateType === 'today') {
-                return today;
-            } else if (dateType === 'yesterday') {
-                const yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
-                return yesterday;
-            } else if (dateType === 'custom') {
-                return new Date(customDateInput.value);
-            }
-        }
-
-        function getSelectedTask() {
-            const activeOption = document.querySelector('.task-option.active');
-            
-            if (activeOption.dataset.type === 'choose') {
-                return taskSelect.value;
-            } else {
-                return customTaskInput.value;
-            }
-        }
-
-        function getSelectedEfficiency() {
-            const selectedButton = document.querySelector('.efficiency-btn.selected');
-            return selectedButton ? parseInt(selectedButton.dataset.value) : null;
-        }
-
-        function calculateDuration() {
-            const timeFrom = timeFromInput.value;
-            const timeTo = timeToInput.value;
-            
-            if (!timeFrom || !timeTo) {
-                durationValue.textContent = "0h 0m";
-                nextDayNotice.style.display = 'none';
-                return;
-            }
-            
-            const selectedDate = getSelectedDate();
-            const fromDateTime = new Date(selectedDate);
-            const toDateTime = new Date(selectedDate);
-            
-            // Set the time for fromDateTime
-            const [fromHours, fromMinutes] = timeFrom.split(':').map(Number);
-            fromDateTime.setHours(fromHours, fromMinutes, 0, 0);
-            
-            // Set the time for toDateTime
-            const [toHours, toMinutes] = timeTo.split(':').map(Number);
-            toDateTime.setHours(toHours, toMinutes, 0, 0);
-            
-            // If to time is earlier than from time, assume it's the next day
-            if (toDateTime < fromDateTime) {
-                toDateTime.setDate(toDateTime.getDate() + 1);
-                nextDayNotice.style.display = 'block';
-            } else {
-                nextDayNotice.style.display = 'none';
-            }
-            
-            // Calculate duration in milliseconds
-            const durationMs = toDateTime - fromDateTime;
-            
-            // Convert to hours and minutes
-            const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
-            const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-            
-            // Format and display duration
-            durationValue.textContent = `${durationHours}h ${durationMinutes}m`;
-            
-            return {
-                hours: durationHours,
-                minutes: durationMinutes,
-                totalMinutes: durationHours * 60 + durationMinutes
-            };
-        }
-
-        function populateTaskSelect() {
-            // Clear existing options except the first one
-            while (taskSelect.options.length > 1) {
-                taskSelect.remove(1);
-            }
-            
-            // Add saved tasks to the dropdown
-            savedTasks.forEach(task => {
-                const option = document.createElement('option');
-                option.value = task;
-                option.textContent = task;
-                taskSelect.appendChild(option);
-            });
-        }
-
-        function addTaskToSavedTasks(task) {
-            // Check if task already exists
-            if (!savedTasks.includes(task)) {
-                savedTasks.push(task);
-                localStorage.setItem('savedTasks', JSON.stringify(savedTasks));
-                populateTaskSelect();
-            }
-        }
-
-        async function saveActivity() {
-            // Validation
-            const timeFrom = timeFromInput.value;
-            const timeTo = timeToInput.value;
-            const task = getSelectedTask();
-            const efficiency = getSelectedEfficiency();
-            const progress = progressInput.value;
-            const selectedDate = getSelectedDate();
-            const duration = calculateDuration();
-            
-            if (!timeFrom || !timeTo) {
-                showConfirmation(false, 'Please select a time range');
-                return;
-            }
-            
-            if (!task) {
-                showConfirmation(false, 'Please select or enter a task');
-                return;
-            }
-            
-            if (efficiency === null) {
-                showConfirmation(false, 'Please select an efficiency rating');
-                return;
-            }
-            
-            // Disable save button
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            
-            // If using custom task, add it to saved tasks
-            const activeTaskOption = document.querySelector('.task-option.active');
-            if (activeTaskOption.dataset.type === 'input') {
-                addTaskToSavedTasks(task);
-            }
-            
-            // Create activity object
-            const activity = {
-                date: firebase.firestore.Timestamp.fromDate(selectedDate),
-                timeFrom: timeFrom,
-                timeTo: timeTo,
-                task: task,
-                efficiency: efficiency,
-                progress: progress,
-                duration: duration.totalMinutes, // Save duration in minutes
-                durationHours: duration.hours,
-                durationMinutes: duration.minutes,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            try {
-                // Save to Firestore
-                await db.collection('activities').add(activity);
-                
-                // Show success confirmation
-                showConfirmation(true, 'Your activity has been saved successfully!');
-                
-                // Reset form
-                efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
-                progressInput.value = '';
-                customTaskInput.value = '';
-                
-                // Reset duration display
-                durationValue.textContent = "0h 0m";
-                nextDayNotice.style.display = 'none';
-                
-                // Select "Average" efficiency again
-                document.querySelector('.efficiency-btn[data-value="0"]').classList.add('selected');
-                
-            } catch (error) {
-                console.error('Error saving activity: ', error);
-                showConfirmation(false, 'Error saving activity. Please try again.');
-            } finally {
-                // Re-enable save button
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Activity';
-            }
-        }
-
-        function showConfirmation(isSuccess, message) {
-            const popupIcon = document.querySelector('.popup-icon');
-            const popupTitle = document.querySelector('.popup-title');
-            const popupMessage = document.querySelector('.popup-message');
-            
-            if (isSuccess) {
-                popupIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                popupIcon.style.color = 'var(--accent)';
-                popupTitle.textContent = 'Success!';
-                popupMessage.textContent = message;
-            } else {
-                popupIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
-                popupIcon.style.color = 'var(--danger)';
-                popupTitle.textContent = 'Error!';
-                popupMessage.textContent = message;
-            }
-            
-            confirmationPopup.classList.add('active');
-        }
-
-        // Initialize with an efficiency selected (Average)
-        document.querySelector('.efficiency-btn[data-value="0"]').classList.add('selected');
-        
-        // Initialize task selection UI
-        chooseTaskContainer.classList.add('active');
-        
-        // Calculate initial duration
-        calculateDuration();
+        // ============================
+        // Initialize
+        // ============================
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
