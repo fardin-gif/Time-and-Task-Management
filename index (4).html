@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/1156/1156961.png" type="image/x-icon">
+    <title>Time & Task Tracker</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0fccce;
+            --accent-dark: #0db9bb;
+            --text: #e6e6e6;
+            --text-secondary: #a0a0a0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent), #4deeea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .nav-btn {
+            top: 25px;
+            right: 25px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 1.05rem;
+        }
+
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            font-size: 12px;
+            color: var(--accent);
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        select {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: var(--transition);
+            font-weight: 400;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(15, 204, 206, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        select option {
+            background: var(--secondary);
+            color: var(--text);
+            padding: 12px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: var(--transition);
+            font-weight: 400;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(15, 204, 206, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .time-range {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .time-range > div {
+            flex: 1;
+        }
+
+        .duration-display {
+            text-align: center;
+            padding: 15px;
+            background: rgba(15, 204, 206, 0.1);
+            border-radius: 12px;
+            margin-top: 15px;
+            border: 1px solid rgba(15, 204, 206, 0.2);
+        }
+
+        .duration-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .duration-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .next-day-notice {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 152, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: var(--warning);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .efficiency-section {
+            margin-top: 30px;
+        }
+
+        .efficiency-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .efficiency-btn {
+            padding: 16px 8px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .efficiency-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .efficiency-btn.selected {
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(15, 204, 206, 0.3);
+        }
+
+        .efficiency-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(15, 204, 206, 0.3);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .date-btn {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .date-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .custom-date {
+            display: none;
+        }
+
+        .custom-date.active {
+            display: block;
+        }
+
+        /* Task Selection Styles */
+        .task-selection {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .task-option {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .task-option.active {
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .task-input-container {
+            display: none;
+        }
+
+        .task-input-container.active {
+            display: block;
+        }
+
+        /* Confirmation Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup {
+            background: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: var(--shadow);
+            transform: scale(0.9);
+            transition: var(--transition);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .popup-overlay.active .popup {
+            transform: scale(1);
+        }
+
+        .popup-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .popup-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .popup-message {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .popup-btn {
+            padding: 14px 30px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .popup-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 700px) {
+            .efficiency-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .date-selector {
+                flex-direction: column;
+            }
+            
+            .task-selection {
+                flex-direction: column;
+            }
+            
+            .time-range {
+                flex-direction: column;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            .nav-btn {
+                position: static;
+                margin-top: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .efficiency-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Time & Task Tracker</h1>
+            <a href="list.html" class="nav-btn" id="viewActivitiesBtn">
+                <i class="fas fa-history"></i> View Activities
+            </a>
+        </header>
+
+        <div class="card">
+            <div class="date-selector">
+                <div class="date-btn active" data-date="today">Today</div>
+                <div class="date-btn" data-date="yesterday">Yesterday</div>
+                <div class="date-btn" data-date="custom">Custom Date</div>
+            </div>
+            
+            <div class="custom-date" id="customDatePicker">
+                <div class="form-group">
+                    <label for="customDate">Select Date</label>
+                    <input type="date" id="customDate">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="timeFrom">Time Range</label>
+                <div class="time-range">
+                    <div>
+                        <label for="timeFrom" style="font-size: 0.9rem; margin-bottom: 5px;">From</label>
+                        <input type="time" id="timeFrom" required>
+                    </div>
+                    <div>
+                        <label for="timeTo" style="font-size: 0.9rem; margin-bottom: 5px;">To</label>
+                        <input type="time" id="timeTo" required>
+                    </div>
+                </div>
+                
+                <div class="next-day-notice" id="nextDayNotice">
+                    <i class="fas fa-moon"></i> This activity spans to the next day
+                </div>
+                
+                <div class="duration-display" id="durationDisplay">
+                    <div class="duration-value" id="durationValue">0h 0m</div>
+                    <div class="duration-label">Total Duration</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="task">Task Done</label>
+                
+                <div class="task-selection">
+                    <div class="task-option active" data-type="choose">Choose</div>
+                    <div class="task-option" data-type="input">Input</div>
+                </div>
+                
+                <div class="task-input-container" id="chooseTaskContainer">
+                    <div class="select-wrapper">
+                        <select id="taskSelect">
+                            <option value="">Select a task</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="task-input-container" id="inputTaskContainer">
+                    <input type="text" id="customTask" placeholder="Enter custom task">
+                </div>
+            </div>
+
+            <div class="efficiency-section">
+                <label>Efficiency</label>
+                <div class="efficiency-grid">
+                    <div class="efficiency-btn" data-value="-3">
+                        <span class="efficiency-value">-3</span>
+                        <span>Khub ii faltu</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="-2">
+                        <span class="efficiency-value">-2</span>
+                        <span>Faltu</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="-1">
+                        <span class="efficiency-value">-1</span>
+                        <span>Blunder</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="0">
+                        <span class="efficiency-value">0</span>
+                        <span>Average</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="1">
+                        <span class="efficiency-value">1</span>
+                        <span>Good</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="2">
+                        <span class="efficiency-value">2</span>
+                        <span>Best</span>
+                    </div>
+                    <div class="efficiency-btn" data-value="3">
+                        <span class="efficiency-value">3</span>
+                        <span>Awesome</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="progress">Progress Notes</label>
+                <textarea id="progress" rows="3" placeholder="Add notes about your progress..."></textarea>
+            </div>
+
+            <button class="btn" id="saveBtn">
+                <i class="fas fa-save"></i> Save Activity
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div class="popup-overlay" id="confirmationPopup">
+        <div class="popup">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="popup-title">Success!</h2>
+            <p class="popup-message">Your activity has been saved successfully to the database.</p>
+            <button class="popup-btn" id="closePopup">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyABxUYOcANeZql5JvK-O2eXs_2NKWd3soo",
+            authDomain: "time-tracker-22dcb.firebaseapp.com",
+            projectId: "time-tracker-22dcb",
+            storageBucket: "time-tracker-22dcb.firebasestorage.app",
+            messagingSenderId: "194403858815",
+            appId: "1:194403858815:web:d337057ec1768f6b9b024a"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // DOM elements
+        const dateButtons = document.querySelectorAll('.date-btn');
+        const customDatePicker = document.getElementById('customDatePicker');
+        const customDateInput = document.getElementById('customDate');
+        const taskOptions = document.querySelectorAll('.task-option');
+        const chooseTaskContainer = document.getElementById('chooseTaskContainer');
+        const inputTaskContainer = document.getElementById('inputTaskContainer');
+        const taskSelect = document.getElementById('taskSelect');
+        const customTaskInput = document.getElementById('customTask');
+        const efficiencyButtons = document.querySelectorAll('.efficiency-btn');
+        const timeFromInput = document.getElementById('timeFrom');
+        const timeToInput = document.getElementById('timeTo');
+        const progressInput = document.getElementById('progress');
+        const saveBtn = document.getElementById('saveBtn');
+        const viewActivitiesBtn = document.getElementById('viewActivitiesBtn');
+        const confirmationPopup = document.getElementById('confirmationPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const durationValue = document.getElementById('durationValue');
+        const nextDayNotice = document.getElementById('nextDayNotice');
+
+        // Set default time values
+        const now = new Date();
+        const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+        
+        timeFromInput.value = formatTime(oneHourAgo);
+        timeToInput.value = formatTime(now);
+        
+        // Set default custom date to today
+        customDateInput.valueAsDate = new Date();
+
+        // Initialize task list from localStorage
+        let savedTasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+        populateTaskSelect();
+
+        // Event listeners
+        dateButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                dateButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                if (button.dataset.date === 'custom') {
+                    customDatePicker.classList.add('active');
+                } else {
+                    customDatePicker.classList.remove('active');
+                }
+                
+                // Recalculate duration when date changes
+                calculateDuration();
+            });
+        });
+
+        taskOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                taskOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                
+                if (option.dataset.type === 'choose') {
+                    chooseTaskContainer.classList.add('active');
+                    inputTaskContainer.classList.remove('active');
+                } else {
+                    chooseTaskContainer.classList.remove('active');
+                    inputTaskContainer.classList.add('active');
+                }
+            });
+        });
+
+        efficiencyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+
+        // Add event listeners for time inputs to calculate duration
+        timeFromInput.addEventListener('change', calculateDuration);
+        timeToInput.addEventListener('change', calculateDuration);
+        customDateInput.addEventListener('change', calculateDuration);
+
+        saveBtn.addEventListener('click', saveActivity);
+        
+        closePopupBtn.addEventListener('click', () => {
+            confirmationPopup.classList.remove('active');
+        });
+
+        // Functions
+        function formatTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function getSelectedDate() {
+            const activeButton = document.querySelector('.date-btn.active');
+            const dateType = activeButton.dataset.date;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (dateType === 'today') {
+                return today;
+            } else if (dateType === 'yesterday') {
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                return yesterday;
+            } else if (dateType === 'custom') {
+                return new Date(customDateInput.value);
+            }
+        }
+
+        function getSelectedTask() {
+            const activeOption = document.querySelector('.task-option.active');
+            
+            if (activeOption.dataset.type === 'choose') {
+                return taskSelect.value;
+            } else {
+                return customTaskInput.value;
+            }
+        }
+
+        function getSelectedEfficiency() {
+            const selectedButton = document.querySelector('.efficiency-btn.selected');
+            return selectedButton ? parseInt(selectedButton.dataset.value) : null;
+        }
+
+        function calculateDuration() {
+            const timeFrom = timeFromInput.value;
+            const timeTo = timeToInput.value;
+            
+            if (!timeFrom || !timeTo) {
+                durationValue.textContent = "0h 0m";
+                nextDayNotice.style.display = 'none';
+                return;
+            }
+            
+            const selectedDate = getSelectedDate();
+            const fromDateTime = new Date(selectedDate);
+            const toDateTime = new Date(selectedDate);
+            
+            // Set the time for fromDateTime
+            const [fromHours, fromMinutes] = timeFrom.split(':').map(Number);
+            fromDateTime.setHours(fromHours, fromMinutes, 0, 0);
+            
+            // Set the time for toDateTime
+            const [toHours, toMinutes] = timeTo.split(':').map(Number);
+            toDateTime.setHours(toHours, toMinutes, 0, 0);
+            
+            // If to time is earlier than from time, assume it's the next day
+            if (toDateTime < fromDateTime) {
+                toDateTime.setDate(toDateTime.getDate() + 1);
+                nextDayNotice.style.display = 'block';
+            } else {
+                nextDayNotice.style.display = 'none';
+            }
+            
+            // Calculate duration in milliseconds
+            const durationMs = toDateTime - fromDateTime;
+            
+            // Convert to hours and minutes
+            const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+            const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            // Format and display duration
+            durationValue.textContent = `${durationHours}h ${durationMinutes}m`;
+            
+            return {
+                hours: durationHours,
+                minutes: durationMinutes,
+                totalMinutes: durationHours * 60 + durationMinutes
+            };
+        }
+
+        function populateTaskSelect() {
+            // Clear existing options except the first one
+            while (taskSelect.options.length > 1) {
+                taskSelect.remove(1);
+            }
+            
+            // Add saved tasks to the dropdown
+            savedTasks.forEach(task => {
+                const option = document.createElement('option');
+                option.value = task;
+                option.textContent = task;
+                taskSelect.appendChild(option);
+            });
+        }
+
+        function addTaskToSavedTasks(task) {
+            // Check if task already exists
+            if (!savedTasks.includes(task)) {
+                savedTasks.push(task);
+                localStorage.setItem('savedTasks', JSON.stringify(savedTasks));
+                populateTaskSelect();
+            }
+        }
+
+        async function saveActivity() {
+            // Validation
+            const timeFrom = timeFromInput.value;
+            const timeTo = timeToInput.value;
+            const task = getSelectedTask();
+            const efficiency = getSelectedEfficiency();
+            const progress = progressInput.value;
+            const selectedDate = getSelectedDate();
+            const duration = calculateDuration();
+            
+            if (!timeFrom || !timeTo) {
+                showConfirmation(false, 'Please select a time range');
+                return;
+            }
+            
+            if (!task) {
+                showConfirmation(false, 'Please select or enter a task');
+                return;
+            }
+            
+            if (efficiency === null) {
+                showConfirmation(false, 'Please select an efficiency rating');
+                return;
+            }
+            
+            // Disable save button
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            // If using custom task, add it to saved tasks
+            const activeTaskOption = document.querySelector('.task-option.active');
+            if (activeTaskOption.dataset.type === 'input') {
+                addTaskToSavedTasks(task);
+            }
+            
+            // Create activity object
+            const activity = {
+                date: firebase.firestore.Timestamp.fromDate(selectedDate),
+                timeFrom: timeFrom,
+                timeTo: timeTo,
+                task: task,
+                efficiency: efficiency,
+                progress: progress,
+                duration: duration.totalMinutes, // Save duration in minutes
+                durationHours: duration.hours,
+                durationMinutes: duration.minutes,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            try {
+                // Save to Firestore
+                await db.collection('activities').add(activity);
+                
+                // Show success confirmation
+                showConfirmation(true, 'Your activity has been saved successfully!');
+                
+                // Reset form
+                efficiencyButtons.forEach(btn => btn.classList.remove('selected'));
+                progressInput.value = '';
+                customTaskInput.value = '';
+                
+                // Reset duration display
+                durationValue.textContent = "0h 0m";
+                nextDayNotice.style.display = 'none';
+                
+                // Select "Average" efficiency again
+                document.querySelector('.efficiency-btn[data-value="0"]').classList.add('selected');
+                
+            } catch (error) {
+                console.error('Error saving activity: ', error);
+                showConfirmation(false, 'Error saving activity. Please try again.');
+            } finally {
+                // Re-enable save button
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Activity';
+            }
+        }
+
+        function showConfirmation(isSuccess, message) {
+            const popupIcon = document.querySelector('.popup-icon');
+            const popupTitle = document.querySelector('.popup-title');
+            const popupMessage = document.querySelector('.popup-message');
+            
+            if (isSuccess) {
+                popupIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                popupIcon.style.color = 'var(--accent)';
+                popupTitle.textContent = 'Success!';
+                popupMessage.textContent = message;
+            } else {
+                popupIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+                popupIcon.style.color = 'var(--danger)';
+                popupTitle.textContent = 'Error!';
+                popupMessage.textContent = message;
+            }
+            
+            confirmationPopup.classList.add('active');
+        }
+
+        // Initialize with an efficiency selected (Average)
+        document.querySelector('.efficiency-btn[data-value="0"]').classList.add('selected');
+        
+        // Initialize task selection UI
+        chooseTaskContainer.classList.add('active');
+        
+        // Calculate initial duration
+        calculateDuration();
+    </script>
+</body>
+</html>

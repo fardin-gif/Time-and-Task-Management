@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity History - Time Tracker</title>
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/1156/1156961.png" type="image/x-icon">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0fccce;
+            --accent-dark: #0db9bb;
+            --text: #e6e6e6;
+            --text-secondary: #a0a0a0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent), #4deeea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid var(--accent);
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 1.05rem;
+        }
+
+        /* Premium Dropdown Styles */
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            font-size: 12px;
+            color: var(--accent);
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        select {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: var(--transition);
+            font-weight: 400;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(15, 204, 206, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        select option {
+            background: var(--secondary);
+            color: var(--text);
+            padding: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: var(--transition);
+            font-weight: 400;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(15, 204, 206, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .activity-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .activity-main {
+            flex: 1;
+        }
+
+        .activity-task {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: 15px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .activity-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .activity-side {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .activity-duration {
+            background: rgba(15, 204, 206, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .efficiency-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .efficiency--3 { background: #F44336; color: white; }
+        .efficiency--2 { background: #FF5722; color: white; }
+        .efficiency--1 { background: #FF9800; color: black; }
+        .efficiency-0 { background: #FFC107; color: black; }
+        .efficiency-1 { background: #8BC34A; color: black; }
+        .efficiency-2 { background: #4CAF50; color: white; }
+        .efficiency-3 { background: #2E7D32; color: white; }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .date-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .task-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-name {
+            font-weight: 500;
+        }
+
+        .task-stats {
+            text-align: right;
+        }
+
+        .task-duration {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .task-count {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Delete Button Styles */
+        .delete-btn {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: var(--danger);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: rgba(244, 67, 54, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Confirmation Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup {
+            background: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: var(--shadow);
+            transform: scale(0.9);
+            transition: var(--transition);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .popup-overlay.active .popup {
+            transform: scale(1);
+        }
+
+        .popup-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--danger);
+        }
+
+        .popup-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .popup-message {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .popup-btn.confirm {
+            background: var(--danger);
+            color: white;
+        }
+
+        .popup-btn.confirm:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .popup-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .popup-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .activity-side {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                position: static;
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .popup-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Back to Tracker
+            </a>
+            <h1><i class="fas fa-history"></i> Activity History</h1>
+        </header>
+
+        <!-- Summary Statistics -->
+        <div class="card">
+            <h2 style="margin-bottom: 20px; color: var(--accent);">Summary Overview</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalActivities">0</div>
+                    <div class="stat-label">Total Activities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalHours">0h 0m</div>
+                    <div class="stat-label">Total Time Tracked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgEfficiency">0.0</div>
+                    <div class="stat-label">Average Efficiency</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="productiveHours">0h 0m</div>
+                    <div class="stat-label">Productive Time</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px; color: var(--accent);">Task Breakdown</h3>
+            <div class="task-breakdown" id="taskBreakdown">
+                <!-- Task breakdown will be populated here -->
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+            <h2 style="margin-bottom: 15px; color: var(--accent);">Filter Activities</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="dateFilter">Date Range</label>
+                    <div class="select-wrapper">
+                        <select id="dateFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group" id="customDateRange" style="display: none;">
+                    <label for="startDate">From Date</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="filter-group" id="customDateRangeEnd" style="display: none;">
+                    <label for="endDate">To Date</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="filter-group">
+                    <label for="taskFilter">Task Type</label>
+                    <div class="select-wrapper">
+                        <select id="taskFilter">
+                            <option value="all">All Tasks</option>
+                            <!-- Tasks will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="efficiencyFilter">Efficiency</label>
+                    <div class="select-wrapper">
+                        <select id="efficiencyFilter">
+                            <option value="all">All Ratings</option>
+                            <option value="-3">Khub ii faltu (-3)</option>
+                            <option value="-2">Faltu (-2)</option>
+                            <option value="-1">Blunder (-1)</option>
+                            <option value="0">Average (0)</option>
+                            <option value="1">Good (1)</option>
+                            <option value="2">Best (2)</option>
+                            <option value="3">Awesome (3)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities List -->
+        <div class="card">
+            <h2 style="margin-bottom: 15px; color: var(--accent);">Activity History</h2>
+            <div id="activitiesContainer">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading your activities...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div class="popup-overlay" id="deleteConfirmationPopup">
+        <div class="popup">
+            <div class="popup-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="popup-title">Delete Activity</h2>
+            <p class="popup-message">Are you sure you want to delete this activity? This action cannot be undone.</p>
+            <div class="popup-buttons">
+                <button class="popup-btn cancel" id="cancelDelete">Cancel</button>
+                <button class="popup-btn confirm" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyABxUYOcANeZql5JvK-O2eXs_2NKWd3soo",
+            authDomain: "time-tracker-22dcb.firebaseapp.com",
+            projectId: "time-tracker-22dcb",
+            storageBucket: "time-tracker-22dcb.firebasestorage.app",
+            messagingSenderId: "194403858815",
+            appId: "1:194403858815:web:d337057ec1768f6b9b024a"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            // Check if Firebase is already initialized
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            db = firebase.firestore();
+            console.log("Firebase initialized successfully");
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+        }
+
+        // DOM elements
+        const activitiesContainer = document.getElementById('activitiesContainer');
+        const dateFilter = document.getElementById('dateFilter');
+        const taskFilter = document.getElementById('taskFilter');
+        const efficiencyFilter = document.getElementById('efficiencyFilter');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const customDateRange = document.getElementById('customDateRange');
+        const customDateRangeEnd = document.getElementById('customDateRangeEnd');
+        const deleteConfirmationPopup = document.getElementById('deleteConfirmationPopup');
+        const cancelDeleteBtn = document.getElementById('cancelDelete');
+        const confirmDeleteBtn = document.getElementById('confirmDelete');
+
+        // Statistics elements
+        const totalActivitiesEl = document.getElementById('totalActivities');
+        const totalHoursEl = document.getElementById('totalHours');
+        const avgEfficiencyEl = document.getElementById('avgEfficiency');
+        const productiveHoursEl = document.getElementById('productiveHours');
+        const taskBreakdownEl = document.getElementById('taskBreakdown');
+
+        // Variables for delete functionality
+        let activityToDelete = null;
+
+        // Set default dates for custom filter
+        const today = new Date();
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        
+        startDateInput.valueAsDate = oneWeekAgo;
+        endDateInput.valueAsDate = today;
+
+        // Event listeners
+        dateFilter.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customDateRange.style.display = 'block';
+                customDateRangeEnd.style.display = 'block';
+            } else {
+                customDateRange.style.display = 'none';
+                customDateRangeEnd.style.display = 'none';
+            }
+            loadActivities();
+        });
+
+        taskFilter.addEventListener('change', loadActivities);
+        efficiencyFilter.addEventListener('change', loadActivities);
+        startDateInput.addEventListener('change', loadActivities);
+        endDateInput.addEventListener('change', loadActivities);
+        
+        // Delete confirmation event listeners
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteConfirmationPopup.classList.remove('active');
+            activityToDelete = null;
+        });
+        
+        confirmDeleteBtn.addEventListener('click', deleteActivity);
+
+        // Functions
+        function getEfficiencyText(efficiency) {
+            const efficiencyMap = {
+                '-3': 'Khub ii faltu',
+                '-2': 'Faltu',
+                '-1': 'Blunder',
+                '0': 'Average',
+                '1': 'Good',
+                '2': 'Best',
+                '3': 'Awesome'
+            };
+            return efficiencyMap[efficiency.toString()] || 'Unknown';
+        }
+
+        function formatDuration(minutes) {
+            if (!minutes) return '0h 0m';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function formatTime(timeString) {
+            if (!timeString) return 'Unknown';
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        function getDateRange() {
+            const filterValue = dateFilter.value;
+            const start = new Date();
+            const end = new Date();
+            
+            start.setHours(0, 0, 0, 0);
+            end.setHours(23, 59, 59, 999);
+            
+            switch(filterValue) {
+                case 'today':
+                    return { start, end };
+                case 'yesterday':
+                    start.setDate(start.getDate() - 1);
+                    end.setDate(end.getDate() - 1);
+                    return { start, end };
+                case 'week':
+                    start.setDate(start.getDate() - start.getDay());
+                    return { start, end };
+                case 'month':
+                    start.setDate(1);
+                    return { start, end };
+                case 'custom':
+                    const customStart = new Date(startDateInput.value);
+                    const customEnd = new Date(endDateInput.value);
+                    customStart.setHours(0, 0, 0, 0);
+                    customEnd.setHours(23, 59, 59, 999);
+                    return { start: customStart, end: customEnd };
+                default:
+                    return null; // All time
+            }
+        }
+
+        function populateTaskFilter(activities) {
+            // Get unique tasks from activities
+            const tasks = [...new Set(activities.map(activity => activity.task))].sort();
+            
+            // Clear existing options except the first one
+            while (taskFilter.options.length > 1) {
+                taskFilter.remove(1);
+            }
+            
+            // Add tasks to the filter
+            tasks.forEach(task => {
+                const option = document.createElement('option');
+                option.value = task;
+                option.textContent = task;
+                taskFilter.appendChild(option);
+            });
+        }
+
+        async function loadActivities() {
+            console.log("Starting to load activities...");
+            
+            activitiesContainer.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading your activities...</p>
+                </div>
+            `;
+
+            try {
+                if (!db) {
+                    throw new Error("Firebase not initialized");
+                }
+
+                let query = db.collection('activities').orderBy('date', 'desc');
+                
+                // Apply date filter
+                const dateRange = getDateRange();
+                if (dateRange) {
+                    console.log("Applying date filter:", dateRange);
+                    query = query.where('date', '>=', firebase.firestore.Timestamp.fromDate(dateRange.start))
+                                 .where('date', '<=', firebase.firestore.Timestamp.fromDate(dateRange.end));
+                }
+                
+                // Apply task filter
+                const taskValue = taskFilter.value;
+                if (taskValue !== 'all') {
+                    console.log("Applying task filter:", taskValue);
+                    query = query.where('task', '==', taskValue);
+                }
+                
+                // Apply efficiency filter
+                const efficiencyValue = efficiencyFilter.value;
+                if (efficiencyValue !== 'all') {
+                    console.log("Applying efficiency filter:", efficiencyValue);
+                    query = query.where('efficiency', '==', parseInt(efficiencyValue));
+                }
+                
+                console.log("Executing Firestore query...");
+                const snapshot = await query.get();
+                console.log("Query completed, found", snapshot.size, "documents");
+                
+                if (snapshot.empty) {
+                    activitiesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>No activities found</h3>
+                            <p>Try adjusting your filters or add some activities in the tracker.</p>
+                        </div>
+                    `;
+                    updateStatistics([]);
+                    return;
+                }
+                
+                const activities = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    console.log("Processing document:", doc.id, data);
+                    
+                    // Convert Firestore timestamp to Date object
+                    let activityDate;
+                    if (data.date && data.date.toDate) {
+                        activityDate = data.date.toDate();
+                    } else if (data.date) {
+                        activityDate = new Date(data.date);
+                    } else {
+                        activityDate = new Date();
+                    }
+                    
+                    activities.push({
+                        id: doc.id,
+                        ...data,
+                        date: activityDate
+                    });
+                });
+                
+                console.log("Processed activities:", activities);
+                displayActivities(activities);
+                updateStatistics(activities);
+                populateTaskFilter(activities);
+                
+            } catch (error) {
+                console.error('Error loading activities: ', error);
+                console.error('Error details:', error.message);
+                console.error('Error stack:', error.stack);
+                
+                activitiesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error loading activities</h3>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Check browser console for details</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayActivities(activities) {
+            if (!activities || activities.length === 0) {
+                activitiesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No activities found</h3>
+                        <p>Try adjusting your filters or add some activities in the tracker.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group activities by date
+            const activitiesByDate = {};
+            activities.forEach(activity => {
+                const date = activity.date.toDateString();
+                if (!activitiesByDate[date]) {
+                    activitiesByDate[date] = [];
+                }
+                activitiesByDate[date].push(activity);
+            });
+            
+            let html = '';
+            
+            // Display activities grouped by date
+            Object.keys(activitiesByDate).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
+                const dateObj = new Date(date);
+                html += `<div class="date-header">${formatDate(dateObj)}</div>`;
+                
+                activitiesByDate[date].forEach(activity => {
+                    const activityDate = activity.date;
+                    const duration = activity.duration ? formatDuration(activity.duration) : '0h 0m';
+                    
+                    html += `
+                        <div class="activity-item">
+                            <div class="activity-main">
+                                <div class="activity-task">${activity.task || 'Unknown Task'}</div>
+                                <div class="activity-meta">
+                                    <span><i class="far fa-clock"></i> ${formatTime(activity.timeFrom)} - ${formatTime(activity.timeTo)}</span>
+                                    <span><i class="far fa-calendar"></i> ${activityDate.toLocaleDateString()}</span>
+                                    ${activity.progress ? `<span><i class="far fa-sticky-note"></i> ${activity.progress}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="activity-side">
+                                <div class="activity-duration">${duration}</div>
+                                <div class="efficiency-badge efficiency-${activity.efficiency}">
+                                    ${getEfficiencyText(activity.efficiency)} (${activity.efficiency})
+                                </div>
+                                <button class="delete-btn" data-id="${activity.id}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            
+            activitiesContainer.innerHTML = html;
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const activityId = this.getAttribute('data-id');
+                    showDeleteConfirmation(activityId);
+                });
+            });
+        }
+
+        function showDeleteConfirmation(activityId) {
+            activityToDelete = activityId;
+            deleteConfirmationPopup.classList.add('active');
+        }
+
+        async function deleteActivity() {
+            if (!activityToDelete) return;
+            
+            try {
+                await db.collection('activities').doc(activityToDelete).delete();
+                console.log("Activity deleted successfully");
+                
+                // Close the confirmation popup
+                deleteConfirmationPopup.classList.remove('active');
+                
+                // Reload activities to reflect the deletion
+                loadActivities();
+                
+            } catch (error) {
+                console.error('Error deleting activity: ', error);
+                alert('Error deleting activity. Please try again.');
+            } finally {
+                activityToDelete = null;
+            }
+        }
+
+        function updateStatistics(activities) {
+            if (!activities || activities.length === 0) {
+                totalActivitiesEl.textContent = '0';
+                totalHoursEl.textContent = '0h 0m';
+                avgEfficiencyEl.textContent = '0.0';
+                productiveHoursEl.textContent = '0h 0m';
+                taskBreakdownEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No task data available</p>';
+                return;
+            }
+
+            // Update basic statistics
+            totalActivitiesEl.textContent = activities.length;
+            
+            // Calculate total time
+            const totalMinutes = activities.reduce((sum, activity) => {
+                return sum + (activity.duration || 0);
+            }, 0);
+            totalHoursEl.textContent = formatDuration(totalMinutes);
+            
+            // Calculate average efficiency
+            const totalEfficiency = activities.reduce((sum, activity) => {
+                return sum + (activity.efficiency || 0);
+            }, 0);
+            const avgEfficiency = activities.length > 0 
+                ? (totalEfficiency / activities.length).toFixed(1)
+                : '0.0';
+            avgEfficiencyEl.textContent = avgEfficiency;
+            
+            // Calculate productive time (activities with efficiency >= 0)
+            const productiveMinutes = activities
+                .filter(activity => (activity.efficiency || 0) >= 0)
+                .reduce((sum, activity) => sum + (activity.duration || 0), 0);
+            productiveHoursEl.textContent = formatDuration(productiveMinutes);
+            
+            // Update task breakdown
+            const taskStats = {};
+            activities.forEach(activity => {
+                const task = activity.task || 'Unknown Task';
+                if (!taskStats[task]) {
+                    taskStats[task] = {
+                        duration: 0,
+                        count: 0
+                    };
+                }
+                taskStats[task].duration += (activity.duration || 0);
+                taskStats[task].count += 1;
+            });
+            
+            let taskHtml = '';
+            Object.keys(taskStats).forEach(task => {
+                const stats = taskStats[task];
+                taskHtml += `
+                    <div class="task-item">
+                        <div class="task-name">${task}</div>
+                        <div class="task-stats">
+                            <div class="task-duration">${formatDuration(stats.duration)}</div>
+                            <div class="task-count">${stats.count} activities</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            taskBreakdownEl.innerHTML = taskHtml;
+        }
+
+        // Load activities when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded, initializing...");
+            setTimeout(() => {
+                loadActivities();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
